@@ -3,6 +3,8 @@ const getResizedRGBDataFromBitmap = (
   newSize: ImageSize,
 ) => {
   const canvas = document.createElement('canvas')
+  canvas.width = newSize.width
+  canvas.height = newSize.height
   const context = canvas.getContext('2d')!
   context.drawImage(
     image,
@@ -16,8 +18,10 @@ const getResizedRGBDataFromBitmap = (
     newSize.height,
   )
   const imageData = context.getImageData(0, 0, newSize.width, newSize.height)
+
   const pixelData = imageData.data
   const rgbData = pixelData.filter((value, index) => index % 4 !== 3)
+
   return rgbData
 }
 

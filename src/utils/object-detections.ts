@@ -75,20 +75,22 @@ class TinyYOLOv2 extends ObjectDetection {
   }
 
   private createInputTensorFromRGBData = (rgbData: Uint8ClampedArray) => {
-    const cwhData = tensor3d(
+    const tfTensor4d = tensor3d(
       new Float32Array(rgbData),
       [this._inputSize.height, this._inputSize.width, 3],
       'float32',
     )
       .transpose([2, 0, 1])
       .expandDims()
-      .dataSync()
-    return new Tensor(cwhData, [
+    const chwData = tfTensor4d.dataSync()
+    tfTensor4d.dispose()
+    const inputTensor = new Tensor(chwData, [
       1,
       3,
       this._inputSize.width,
       this._inputSize.height,
     ])
+    return inputTensor
   }
 
   public preprocess = (image: ImageBitmap): TypedTensor<Tensor.Type> => {
